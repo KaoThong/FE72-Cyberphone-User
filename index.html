@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Shopping Phone</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+    <style>
+      .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="display-4 my-4">Cyber Phone</header>
+      <!-- Phan tab menu -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            href="#DanhSachSP"
+            role="tab"
+            data-toggle="tab"
+            >Danh sách sản phẩm</a
+          >
+        </li>
+      </ul>
+      <br />
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <!--Danh sách sản phẩm -->
+        <div role="tabpanel" class="tab-pane in active" id="DanhSachSP">
+          <div class="row">
+            <div class="col-md-4">
+              <!-- BEGIN BUTTOM THÊM MỚI -->
+              <button
+                id="btnGioHang"
+                class="btn btn-info"
+                data-toggle="modal"
+                data-target="#myModal"
+                onclick="renderCartProductList()"
+              >
+              <i class="fa-solid fa-cart-circle-check"></i>
+                Giỏ hàng
+              </button>
+              <!-- END BUTTON THÊM MỚI -->
+            </div>
+            <div class="col-md-4">
+              <!-- BEGIN TÌM KIẾM -->
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Nhập từ khóa"
+                  id="inputSearch"
+                  oninput="searchPhone()"
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2"
+                    ><i class="fa fa-search"></i
+                  ></span>
+                </div>
+              </div>
+              <!-- END TÌM KIẾM -->
+            </div>
+            <div class="col-md-4">
+              <select
+                class="custom-select"
+                id="filter"
+                onchange="filterPhone()"
+              >
+                <option selected>All</option>
+                <option>Iphone</option>
+                <option>Samsung</option>
+              </select>
+            </div>
+          </div>
+          <div class="clear-fix"></div>
+          <div class="tblSanPham" id="tblSanPham">
+            <!-- Loading -->
+            <div id="loading" style="display: none" class="loader"></div>
+            <!-- BEGIN TABLE SẢN PHẨM -->
+            <table class="table table-bordered">
+              <thead>
+                <th>STT</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Screen</th>
+                <th>Back Camera</th>
+                <th>Front Camera</th>
+                <th>Image</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Action</th>
+              </thead>
+              <tbody id="tblDanhSachSP"></tbody>
+            </table>
+            <!-- END TABLE SẢN PHẨM -->
+          </div>
+          <br />
+        </div>
+        <!-- Kết thúc danh sách sản phẩm -->
+      </div>
+
+      <!--KetThuc Tabmenu-->
+
+      <!-- The Modal -->
+      <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Modal Heading</h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+            <!-- Modal body -->
+            <div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th>Img</th>
+                    <th scope="col">Giá</th>
+                    <th scope="col" style="width: 30%">Số lượng</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="cartItem">
+                  
+
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Tổng tiền:</th>
+                    <th scope="col" id="totalCart"></th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button id="btnPaid" onclick="" class="btn btn-info">
+                Thanh toán
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="container"></div>
+    <style>
+      #container {
+        min-width: 310px;
+        max-width: 800px;
+        height: 400px;
+        margin: 0 auto;
+      }
+    </style>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"
+      integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="./services/index.js"></script>
+    <script src="./models/Products.js"></script>
+    <script src="./controllers/index.js"></script>
+  </body>
+</html>
